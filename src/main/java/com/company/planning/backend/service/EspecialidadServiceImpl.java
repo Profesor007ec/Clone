@@ -1,6 +1,8 @@
 package com.company.planning.backend.service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,6 +32,35 @@ public class EspecialidadServiceImpl implements IEspecialidadService {
 			response.getEspecialidadResponse().setEspecialidad(especialidad);
 			
 			response.setMetadata("Respuesta OK", "00", "Respuesta exitosa");
+			
+		}catch (Exception e) {
+			response.setMetadata("Respuesta no OK", "-1", "Error al consultar");
+			e.getStackTrace();
+			return new ResponseEntity<EspecialidadResponseRest>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		return new ResponseEntity<EspecialidadResponseRest>(response, HttpStatus.OK);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public ResponseEntity<EspecialidadResponseRest> searchById(Long id) {
+		
+		EspecialidadResponseRest response = new EspecialidadResponseRest();
+		List<Especialidad> list = new ArrayList<>();
+		
+		try {
+			
+			Optional<Especialidad> especialidad = especialidadDao.findById(id);
+			
+			if (especialidad.isPresent()) {
+				list.add(especialidad.get());
+				response.getEspecialidadResponse().setEspecialidad(list);
+				response.setMetadata("Respuesta OK", "00", "Especialidad encontrada");
+			}else {
+				response.setMetadata("Respuesta no OK", "-1", "Error especialidad no encontrada");
+				return new ResponseEntity<EspecialidadResponseRest>(response, HttpStatus.NOT_FOUND);
+			}
 			
 		}catch (Exception e) {
 			response.setMetadata("Respuesta no OK", "-1", "Error al consultar");
