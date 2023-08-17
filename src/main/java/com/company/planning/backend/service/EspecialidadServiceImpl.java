@@ -63,7 +63,36 @@ public class EspecialidadServiceImpl implements IEspecialidadService {
 			}
 			
 		}catch (Exception e) {
-			response.setMetadata("Respuesta no OK", "-1", "Error al consultar");
+			response.setMetadata("Respuesta no OK", "-1", "Error al consultar la especialidad");
+			e.getStackTrace();
+			return new ResponseEntity<EspecialidadResponseRest>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		return new ResponseEntity<EspecialidadResponseRest>(response, HttpStatus.OK);
+	}
+
+	@Override
+	@Transactional
+	public ResponseEntity<EspecialidadResponseRest> save(Especialidad especialidad) {
+		
+		EspecialidadResponseRest response = new EspecialidadResponseRest();
+		List<Especialidad> list = new ArrayList<>();
+		
+		try {
+			
+			Especialidad especialidadSaved = especialidadDao.save(especialidad);
+			
+			if (especialidadSaved != null) {
+				list.add(especialidadSaved);
+				response.getEspecialidadResponse().setEspecialidad(list);
+				response.setMetadata("Respuesta OK", "00", "Especialidad guardada");
+			}else {
+				response.setMetadata("Respuesta no OK", "-1", "Especialidad no guardada");
+				return new ResponseEntity<EspecialidadResponseRest>(response, HttpStatus.BAD_REQUEST);
+			}
+			
+		}catch (Exception e) {
+			response.setMetadata("Respuesta no OK", "-1", "Error al grabar especialidad");
 			e.getStackTrace();
 			return new ResponseEntity<EspecialidadResponseRest>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
