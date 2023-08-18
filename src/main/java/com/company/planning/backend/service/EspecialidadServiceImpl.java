@@ -139,4 +139,24 @@ public class EspecialidadServiceImpl implements IEspecialidadService {
 		return new ResponseEntity<EspecialidadResponseRest>(response, HttpStatus.OK);
 	}
 
+	@Override
+	@Transactional
+	public ResponseEntity<EspecialidadResponseRest> deleteById(Long id) {
+		
+		EspecialidadResponseRest response = new EspecialidadResponseRest();
+		
+		try {
+			
+			especialidadDao.deleteById(id);
+			response.setMetadata("Respuesta OK", "00", "Regitro eliminado");
+			
+		}catch (Exception e) {
+			response.setMetadata("Respuesta no OK", "-1", "Error al eliminar");
+			e.getStackTrace();
+			return new ResponseEntity<EspecialidadResponseRest>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		return new ResponseEntity<EspecialidadResponseRest>(response, HttpStatus.OK);
+	}
+
 }

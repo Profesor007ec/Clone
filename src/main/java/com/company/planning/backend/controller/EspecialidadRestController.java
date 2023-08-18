@@ -2,6 +2,7 @@ package com.company.planning.backend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,6 +42,12 @@ public class EspecialidadRestController {
 	@PutMapping("/especialidades/{id}")
 	public ResponseEntity<EspecialidadResponseRest> update(@RequestBody Especialidad especialidad, @PathVariable Long id){
 		ResponseEntity<EspecialidadResponseRest> response = service.update(especialidad, id);
+		return response;
+	}
+	
+	@DeleteMapping("/especialidades/{id}")
+	public ResponseEntity<EspecialidadResponseRest> delete(@PathVariable Long id){
+		ResponseEntity<EspecialidadResponseRest> response = service.deleteById(id);
 		return response;
 	}
 
