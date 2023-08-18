@@ -10,5 +10,6 @@ public interface IEspecialidadService {
 	public ResponseEntity<EspecialidadResponseRest> search();
 	public ResponseEntity<EspecialidadResponseRest> searchById(Long id);
 	public ResponseEntity<EspecialidadResponseRest> save(Especialidad especialidad);
+	public ResponseEntity<EspecialidadResponseRest> update(Especialidad especialidad, Long id);
 
 }

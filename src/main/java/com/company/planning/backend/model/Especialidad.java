@@ -45,7 +45,7 @@ public class Especialidad implements Serializable{
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-	public boolean isEstado() {
+	public boolean getEstado() {
 		return estado;
 	}
 	public void setEstado(boolean estado) {

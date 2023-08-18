@@ -100,4 +100,43 @@ public class EspecialidadServiceImpl implements IEspecialidadService {
 		return new ResponseEntity<EspecialidadResponseRest>(response, HttpStatus.OK);
 	}
 
+	@Override
+	@Transactional
+	public ResponseEntity<EspecialidadResponseRest> update(Especialidad especialidad, Long id) {
+		
+		EspecialidadResponseRest response = new EspecialidadResponseRest();
+		List<Especialidad> list = new ArrayList<>();
+		
+		try {
+			
+			Optional<Especialidad> especialidadSearch = especialidadDao.findById(id);
+			if (especialidadSearch.isPresent()) {
+				//Se procederá  actualizar el registro
+				especialidadSearch.get().setCodigo(especialidad.getCodigo());
+				especialidadSearch.get().setNombre(especialidad.getNombre());
+				especialidadSearch.get().setEstado(especialidad.getEstado());
+				
+				Especialidad especialidadToUpdate = especialidadDao.save(especialidadSearch.get());
+				if (especialidadToUpdate != null) {
+					list.add(especialidadToUpdate);
+					response.getEspecialidadResponse().setEspecialidad(list);
+					response.setMetadata("Respuesta OK", "00", "Especialidad actualizada");
+				}else {
+					response.setMetadata("Respuesta no OK", "-1", "Especialidad no actualizada");
+					return new ResponseEntity<EspecialidadResponseRest>(response, HttpStatus.BAD_REQUEST);
+				}
+			}else {
+				response.setMetadata("Respuesta no OK", "-1", "Especialidad no encontrada");
+				return new ResponseEntity<EspecialidadResponseRest>(response, HttpStatus.NOT_FOUND);
+			}
+			
+		}catch (Exception e) {
+			response.setMetadata("Respuesta no OK", "-1", "Error al actualizar especialidad");
+			e.getStackTrace();
+			return new ResponseEntity<EspecialidadResponseRest>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		return new ResponseEntity<EspecialidadResponseRest>(response, HttpStatus.OK);
+	}
+
 }
