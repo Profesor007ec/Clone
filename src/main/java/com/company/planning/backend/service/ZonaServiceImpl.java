@@ -90,6 +90,42 @@ public class ZonaServiceImpl implements IZonaService {
 		return new ResponseEntity<ZonaResponseRest>(response, HttpStatus.OK);
 	}
 
+	@Override
+	@Transactional
+	public ResponseEntity<ZonaResponseRest> update(Zona zona, Long id) {
+		ZonaResponseRest response = new ZonaResponseRest();
+		List<Zona> list = new ArrayList<>();
+		
+		try {
+			Optional<Zona> zonaSearch = zonaDao.findById(id);
+			if (zonaSearch.isPresent()) {
+				//Se actualiza el registro
+				zonaSearch.get().setCodigo(zona.getCodigo());
+				zonaSearch.get().setNombre(zona.getNombre());
+				zonaSearch.get().setEstado(zona.getEstado());
+				
+				Zona zonaToUpdate = zonaDao.save(zonaSearch.get());
+				
+				if (zonaToUpdate != null) {
+					list.add(zonaToUpdate);
+					response.getZonaResponse().setZona(list);
+					response.setMetadata("Respuesta OK", "00", "Zona actualizada");
+				} else {
+					response.setMetadata("Respuesta no OK", "-1", "Zona no actualizada");
+					return new ResponseEntity<ZonaResponseRest>(response, HttpStatus.BAD_REQUEST);
+				}
+			} else {
+				response.setMetadata("Respuesta no OK", "-1", "Zona no encontrada");
+				return new ResponseEntity<ZonaResponseRest>(response, HttpStatus.NOT_FOUND);
+			}
+		} catch (Exception e) {
+			response.setMetadata("Respuesta no OK", "-1", "Error al actualizar la zona");
+			e.getStackTrace();
+			return new ResponseEntity<ZonaResponseRest>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return new ResponseEntity<ZonaResponseRest>(response, HttpStatus.OK);
+	}
+
 	
 	
 }

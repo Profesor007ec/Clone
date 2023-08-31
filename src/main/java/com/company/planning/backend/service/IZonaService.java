@@ -10,6 +10,6 @@ public interface IZonaService {
 	public ResponseEntity<ZonaResponseRest> search();
 	public ResponseEntity<ZonaResponseRest> searchById(Long id);
 	public ResponseEntity<ZonaResponseRest> save(Zona zona);
-
+	public ResponseEntity<ZonaResponseRest> update(Zona zona, Long id);
 
 }
