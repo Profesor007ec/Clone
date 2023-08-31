@@ -3,6 +3,7 @@ package com.company.planning.backend.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,6 +45,12 @@ public class ZonaRestController {
 	@PutMapping("/zonas/{id}")
 	public ResponseEntity<ZonaResponseRest> updateZona(@RequestBody Zona zona, @PathVariable Long id){
 		ResponseEntity<ZonaResponseRest> response = service.update(zona, id);
+		return response;
+	}
+	
+	@DeleteMapping("/zonas/{id}")
+	public ResponseEntity<ZonaResponseRest> deleteZona(@PathVariable Long id){
+		ResponseEntity<ZonaResponseRest> response = service.deleteById(id);
 		return response;
 	}
 

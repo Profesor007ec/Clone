@@ -11,5 +11,5 @@ public interface IZonaService {
 	public ResponseEntity<ZonaResponseRest> searchById(Long id);
 	public ResponseEntity<ZonaResponseRest> save(Zona zona);
 	public ResponseEntity<ZonaResponseRest> update(Zona zona, Long id);
-
+	public ResponseEntity<ZonaResponseRest> deleteById(Long id);
 }

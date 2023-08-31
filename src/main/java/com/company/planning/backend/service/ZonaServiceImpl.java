@@ -126,6 +126,23 @@ public class ZonaServiceImpl implements IZonaService {
 		return new ResponseEntity<ZonaResponseRest>(response, HttpStatus.OK);
 	}
 
+	@Override
+	@Transactional
+	public ResponseEntity<ZonaResponseRest> deleteById(Long id) {
+		
+		ZonaResponseRest response = new ZonaResponseRest();
+		
+		try {
+			zonaDao.deleteById(id);
+			response.setMetadata("Respuesta OK", "00", "Registro eliminado");
+		} catch (Exception e) {
+			response.setMetadata("Respuesta no OK", "-1", "Error al eliminar el registro");
+			e.getStackTrace();
+			return new ResponseEntity<ZonaResponseRest>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return new ResponseEntity<ZonaResponseRest>(response, HttpStatus.OK);
+	}
+
 	
 	
 }
