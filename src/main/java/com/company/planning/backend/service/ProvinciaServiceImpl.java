@@ -64,6 +64,32 @@ public class ProvinciaServiceImpl implements IProvinciaService {
 		return new ResponseEntity<ProvinciaResponseRest>(response, HttpStatus.OK);
 	}
 
+	@Override
+	@Transactional
+	public ResponseEntity<ProvinciaResponseRest> save(Provincia provincia) {
+		
+		ProvinciaResponseRest response = new ProvinciaResponseRest();
+		List<Provincia> list = new ArrayList<>();
+		
+		try {
+			Provincia provinciaSaved = provinciaDao.save(provincia);
+			
+			if (provinciaSaved != null) {
+				list.add(provinciaSaved);
+				response.getProvinciaResponse().setProvincia(list);
+				response.setMetadata("Respuesta OK", "00", "Provincia guardada");
+			}else {
+				response.setMetadata("Respuesta no OK", "-1", "Provincia no guardada");
+				return new ResponseEntity<ProvinciaResponseRest>(response, HttpStatus.BAD_REQUEST);
+			}
+		}catch (Exception e) {
+			response.setMetadata("Respuesta no OK", "-1", "Error al guardar provincia");
+			e.getStackTrace();
+			return new ResponseEntity<ProvinciaResponseRest>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return new ResponseEntity<ProvinciaResponseRest>(response, HttpStatus.OK);
+	}
+
 	
 
 }
