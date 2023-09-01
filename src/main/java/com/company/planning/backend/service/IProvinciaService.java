@@ -9,5 +9,5 @@ public interface IProvinciaService {
 	
 	public ResponseEntity<ProvinciaResponseRest> search();
 	public ResponseEntity<ProvinciaResponseRest> searchById(Long id);
-	public ResponseEntity<ProvinciaResponseRest> save(Provincia provincia);
+	public ResponseEntity<ProvinciaResponseRest> save(Provincia provincia, Long zonaId);
 }
