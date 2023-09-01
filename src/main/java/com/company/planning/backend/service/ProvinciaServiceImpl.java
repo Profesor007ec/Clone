@@ -1,6 +1,8 @@
 package com.company.planning.backend.service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,10 +28,34 @@ public class ProvinciaServiceImpl implements IProvinciaService {
 		
 		try {
 			List<Provincia> provincia = (List<Provincia>) provinciaDao.findAll();
-			
 			response.getProvinciaResponse().setProvincia(provincia);
-			
 			response.setMetadata("Respuesta OK", "00", "Respuesta exitosa");
+		}catch (Exception e) {
+			response.setMetadata("Respuesta no OK", "-1", "Error al consultar provincias");
+			e.getStackTrace();
+			return new ResponseEntity<ProvinciaResponseRest>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return new ResponseEntity<ProvinciaResponseRest>(response, HttpStatus.OK);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public ResponseEntity<ProvinciaResponseRest> searchById(Long id) {
+		
+		ProvinciaResponseRest response = new ProvinciaResponseRest();
+		List<Provincia> list = new ArrayList<>();
+		
+		try {
+			Optional<Provincia> provincia = provinciaDao.findById(id);
+			
+			if (provincia.isPresent()) {
+				list.add(provincia.get());
+				response.getProvinciaResponse().setProvincia(list);
+				response.setMetadata("Respuesta OK", "00", "Provincia encontrada");
+			}else {
+				response.setMetadata("Respuesta no OK", "-1", "Error provincia no encontrada");
+				return new ResponseEntity<ProvinciaResponseRest>(response, HttpStatus.NOT_FOUND);
+			}
 		}catch (Exception e) {
 			response.setMetadata("Respuesta no OK", "-1", "Error al consultar provincias");
 			e.getStackTrace();
