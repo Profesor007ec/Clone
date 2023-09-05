@@ -5,9 +5,10 @@ import java.io.IOException;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,19 +29,8 @@ public class ProvinciaRestController {
 		this.provinciaService = provinciaService;
 	}
 
-	@GetMapping("/provincias")
-	public ResponseEntity<ProvinciaResponseRest> searchProvincias(){
-		ResponseEntity<ProvinciaResponseRest> response = provinciaService.search();
-		return response;
-	}
 	
-	@GetMapping("/provincias/{id}")
-	public ResponseEntity<ProvinciaResponseRest> searchProvinciasById(@PathVariable Long id){
-		ResponseEntity<ProvinciaResponseRest> response = provinciaService.searchById(id);
-		return response;
-	}
-	
-	@PutMapping("/provincias")
+	@PostMapping("/provincias")
 	public ResponseEntity<ProvinciaResponseRest> saveProvincias(
 			@RequestParam("codigo") String codigo,
 			@RequestParam("nombre") String nombre,
@@ -54,4 +44,23 @@ public class ProvinciaRestController {
 		ResponseEntity<ProvinciaResponseRest> response = provinciaService.save(provincia, zonaId);
 		return response;
 	}
+	
+	@GetMapping("/provincias/{id}")
+	public ResponseEntity<ProvinciaResponseRest> searchByIdProvincias(@PathVariable Long id){
+		ResponseEntity<ProvinciaResponseRest> response = provinciaService.searchById(id);
+		return response;
+	}
+	
+	@GetMapping("/provincias/filter/{nombre}")
+	public ResponseEntity<ProvinciaResponseRest> searchByNameProvincias(@PathVariable String nombre){
+		ResponseEntity<ProvinciaResponseRest> response = provinciaService.searchByName(nombre);
+		return response;
+	}
+	
+	@DeleteMapping("/provincias/{id}")
+	public ResponseEntity<ProvinciaResponseRest> deleteByIdProvincias(@PathVariable Long id){
+		ResponseEntity<ProvinciaResponseRest> response = provinciaService.deleteById(id);
+		return response;
+	}
+	
 }

@@ -29,50 +29,6 @@ public class ProvinciaServiceImpl implements IProvinciaService {
 
 
 	@Override
-	@Transactional(readOnly = true)
-	public ResponseEntity<ProvinciaResponseRest> search() {
-		
-		ProvinciaResponseRest response = new ProvinciaResponseRest();
-		
-		try {
-			List<Provincia> provincia = (List<Provincia>) provinciaDao.findAll();
-			response.getProvinciaResponse().setProvincia(provincia);
-			response.setMetadata("Respuesta OK", "00", "Respuesta exitosa");
-		}catch (Exception e) {
-			response.setMetadata("Respuesta no OK", "-1", "Error al consultar provincias");
-			e.getStackTrace();
-			return new ResponseEntity<ProvinciaResponseRest>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		return new ResponseEntity<ProvinciaResponseRest>(response, HttpStatus.OK);
-	}
-
-	@Override
-	@Transactional(readOnly = true)
-	public ResponseEntity<ProvinciaResponseRest> searchById(Long id) {
-		
-		ProvinciaResponseRest response = new ProvinciaResponseRest();
-		List<Provincia> list = new ArrayList<>();
-		
-		try {
-			Optional<Provincia> provincia = provinciaDao.findById(id);
-			
-			if (provincia.isPresent()) {
-				list.add(provincia.get());
-				response.getProvinciaResponse().setProvincia(list);
-				response.setMetadata("Respuesta OK", "00", "Provincia encontrada");
-			}else {
-				response.setMetadata("Respuesta no OK", "-1", "Error provincia no encontrada");
-				return new ResponseEntity<ProvinciaResponseRest>(response, HttpStatus.NOT_FOUND);
-			}
-		}catch (Exception e) {
-			response.setMetadata("Respuesta no OK", "-1", "Error al consultar provincias");
-			e.getStackTrace();
-			return new ResponseEntity<ProvinciaResponseRest>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		return new ResponseEntity<ProvinciaResponseRest>(response, HttpStatus.OK);
-	}
-
-	@Override
 	@Transactional
 	public ResponseEntity<ProvinciaResponseRest> save(Provincia provincia, Long zonaid) {
 		
@@ -104,6 +60,87 @@ public class ProvinciaServiceImpl implements IProvinciaService {
 		}catch (Exception e) {
 			response.setMetadata("Respuesta no OK", "-1", "Error al guardar provincia");
 			e.getStackTrace();
+			return new ResponseEntity<ProvinciaResponseRest>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return new ResponseEntity<ProvinciaResponseRest>(response, HttpStatus.OK);
+	}
+
+
+
+
+	@Override
+	@Transactional(readOnly = true)
+	public ResponseEntity<ProvinciaResponseRest> searchById(Long id) {
+		ProvinciaResponseRest response = new ProvinciaResponseRest();
+		List<Provincia> list = new ArrayList<>();
+		
+		try {
+			
+			//buscamos el producto por id
+			Optional<Provincia> provincia = provinciaDao.findById(id);
+			
+			if ( provincia.isPresent()) {
+				list.add(provincia.get());
+				response.getProvinciaResponse().setProvincia(list);
+				response.setMetadata("Respuesta OK", "00", "Provincia encontrada");
+			}else {
+				response.setMetadata("Respuesta no OK", "-1", "Provincia no encontrada");
+				return new ResponseEntity<ProvinciaResponseRest>(response, HttpStatus.NOT_FOUND);
+			}
+		}catch (Exception e) {
+			e.getStackTrace();
+			response.setMetadata("Respuesta no OK", "-1", "Error al buscar provincia");
+			return new ResponseEntity<ProvinciaResponseRest>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return new ResponseEntity<ProvinciaResponseRest>(response, HttpStatus.OK);
+	}
+
+
+	@Override
+	@Transactional(readOnly = true)
+	public ResponseEntity<ProvinciaResponseRest> searchByName(String nombre) {
+		ProvinciaResponseRest response = new ProvinciaResponseRest();
+		List<Provincia> list = new ArrayList<>();
+		List<Provincia> listAux = new ArrayList<>();
+		
+		try {
+			
+			//buscamos el producto por name
+			listAux = provinciaDao.findByNameContainingIgnoreCase(nombre);
+			
+			if ( listAux.size() > 0) {
+				listAux.stream().forEach( (p) -> {
+					list.add(p);
+				});
+				response.getProvinciaResponse().setProvincia(list);
+				response.setMetadata("Respuesta OK", "00", "Provincia encontrada");
+				
+			}else {
+				response.setMetadata("Respuesta no OK", "-1", "Provincia no encontrada");
+				return new ResponseEntity<ProvinciaResponseRest>(response, HttpStatus.NOT_FOUND);
+			}
+		}catch (Exception e) {
+			e.getStackTrace();
+			response.setMetadata("Respuesta no OK", "-1", "Error al buscar provincia");
+			return new ResponseEntity<ProvinciaResponseRest>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return new ResponseEntity<ProvinciaResponseRest>(response, HttpStatus.OK);
+	}
+
+
+	@Override
+	@Transactional
+	public ResponseEntity<ProvinciaResponseRest> deleteById(Long id) {
+		ProvinciaResponseRest response = new ProvinciaResponseRest();
+		
+		try {
+			
+			//Borramos producto por id
+			provinciaDao.deleteById(id);
+			response.setMetadata("Respuesta OK", "00", "Provincia eliminada");
+		}catch (Exception e) {
+			e.getStackTrace();
+			response.setMetadata("Respuesta no OK", "-1", "Error al eliminar provincia");
 			return new ResponseEntity<ProvinciaResponseRest>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return new ResponseEntity<ProvinciaResponseRest>(response, HttpStatus.OK);

@@ -20,11 +20,12 @@ import lombok.Data;
 @Table(name = "provincias")
 public class Provincia implements Serializable{
 
+	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 6545983637348087659L;
-	
+	private static final long serialVersionUID = -3751196742729673903L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -36,7 +37,7 @@ public class Provincia implements Serializable{
 	private Boolean estado;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JsonIgnoreProperties({"hibernateLazyInitializater","handler"})
+	@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 	private Zona zona;
 
 	
