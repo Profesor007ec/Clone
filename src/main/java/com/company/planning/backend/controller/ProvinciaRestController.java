@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -60,6 +61,28 @@ public class ProvinciaRestController {
 	@DeleteMapping("/provincias/{id}")
 	public ResponseEntity<ProvinciaResponseRest> deleteByIdProvincias(@PathVariable Long id){
 		ResponseEntity<ProvinciaResponseRest> response = provinciaService.deleteById(id);
+		return response;
+	}
+	
+	@GetMapping("/provincias")
+	public ResponseEntity<ProvinciaResponseRest> searchProvincias(){
+		ResponseEntity<ProvinciaResponseRest> response = provinciaService.search();
+		return response;
+	}
+	
+	@PutMapping("/provincias/{id}")
+	public ResponseEntity<ProvinciaResponseRest> updateProvincias(
+			@RequestParam("codigo") String codigo,
+			@RequestParam("nombre") String nombre,
+			@RequestParam("estado") Boolean estado,
+			@RequestParam("zonaId") Long zonaId,
+			@PathVariable Long id) throws IOException
+	{
+		Provincia provincia = new Provincia();
+		provincia.setCodigo(codigo);
+		provincia.setNombre(nombre);
+		provincia.setEstado(estado);
+		ResponseEntity<ProvinciaResponseRest> response = provinciaService.update(provincia, zonaId, id);
 		return response;
 	}
 	

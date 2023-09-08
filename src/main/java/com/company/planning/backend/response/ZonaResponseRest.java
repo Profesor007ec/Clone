@@ -8,8 +8,5 @@ import lombok.Setter;
 public class ZonaResponseRest extends ResponseRest {
 	
 	private ZonaResponse zonaResponse = new ZonaResponse();
-
-	
-
-	
+		
 }

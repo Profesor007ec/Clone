@@ -11,4 +11,6 @@ public interface IProvinciaService {
 	public ResponseEntity<ProvinciaResponseRest> searchById(Long id);
 	public ResponseEntity<ProvinciaResponseRest> searchByName(String nombre);
 	public ResponseEntity<ProvinciaResponseRest> deleteById(Long id);
+	public ResponseEntity<ProvinciaResponseRest> search();
+	public ResponseEntity<ProvinciaResponseRest> update(Provincia provincia, Long zonaId, Long id);
 }
